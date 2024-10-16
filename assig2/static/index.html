@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    
+    <script src="https://code.highcharts.com/modules/arearange.js"></script>
+<script src="https://code.highcharts.com/modules/datagrouping.js"></script>
+<script src="https://code.highcharts.com/modules/windbarb.js"></script>
+<script src="https://code.highcharts.com/modules/pattern-fill.js"></script>
+<script src="https://code.highcharts.com/modules/data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    
+
+
+    <link rel="stylesheet" href="static/styles.css" />
+    <script src="static/script.js" defer></script>
+</head>
+
+<body>
+    <div class="top-banner">
+        <img class="top-banner-img" src="static/Images/banner.jpg"   alt="" />
+        <div class="top-banner-heading">Weather Search</div>
+    <div class="top-banner-subheading">Fill out the form to get Weather Info !</div>
+        <form id="form" onsubmit="event.preventDefault(); getIPInfo();">
+            <div style="text-align:center">
+                <label class="required-label" for="street" style="color:rgb(32, 89, 130);text-align:left;margin-left:30px;padding-bottom:7px;">
+                    Street<span class="required-asterisk">*</span>
+                </label>
+                <input type="text" id="street" name="street" style="width:520px;height:26px;" required />
+            </div>
+           
+            <div class="tooltip">Please fill out this field</div>
+            
+                <label class="required-label" for="city" style="color:rgb(32, 89, 130);text-align:left;margin-left:30px;padding-bottom:7px;padding-top:15px;">
+                    City<span class="required-asterisk">*</span>
+                </label>
+                <input type="text" id="city" name="city" required style="width:220px;height:26px;margin-left:30px;" />
+            
+            
+            <div id="tooltip" class="tooltip">Please select a state.</div>
+            <label for="state" style="position:relative;bottom: 29px;left: 35px;color: rgb(32, 89, 130);">State<span class="required-asterisk">*</span></label>
+            <select name="state" id="state" style="position:relative;right: 12px;bottom: 6px;width: 260px;" required>
+                <option value="">Select your state</option>
+                <option value="AL">Alabama</option>
+                <option value="Alaska">Alaska</option>
+                <option value="AZ">Arizona</option>
+                <option value="AR">Arkansas</option>
+                <option value="CA">California</option>
+                <option value="CO">Colorado</option>
+                <option value="CT">Connecticut</option>
+                <option value="DE">Delaware</option>
+                <option value="DC">District Of Columbia</option>
+                <option value="FL">Florida</option>
+                <option value="GA">Georgia</option>
+                <option value="HI">Hawaii</option>
+                <option value="ID">Idaho</option>
+                <option value="IL">Illinois</option>
+                <option value="IN">Indiana</option>
+                <option value="IA">Iowa</option>
+                <option value="KS">Kansas</option>
+                <option value="KY">Kentucky</option>
+                <option value="LA">Louisiana</option>
+                <option value="ME">Maine</option>
+                <option value="MD">Maryland</option>
+                <option value="MA">Massachusetts</option>
+                <option value="MI">Michigan</option>
+                <option value="MN">Minnesota</option>
+                <option value="MS">Mississippi</option>
+                <option value="MO">Missouri</option>
+                <option value="MT">Montana</option>
+                <option value="NE">Nebraska</option>
+                <option value="NV">Nevada</option>
+                <option value="NH">New Hampshire</option>
+                <option value="NJ">New Jersey</option>
+                <option value="NM">New Mexico</option>
+                <option value="NY">New York</option>
+                <option value="NC">North Carolina</option>
+                <option value="ND">North Dakota</option>
+                <option value="OH">Ohio</option>
+                <option value="OK">Oklahoma</option>
+                <option value="OR">Oregon</option>
+                <option value="PA">Pennsylvania</option>
+                <option value="RI">Rhode Island</option>
+                <option value="SC">South Carolina</option>
+                <option value="SD">South Dakota</option>
+                <option value="TN">Tennessee</option>
+                <option value="TX">Texas</option>
+                <option value="UT">Utah</option>
+                <option value="VT">Vermont</option>
+                <option value="VA">Virginia</option>
+                <option value="WA">Washington</option>
+                <option value="WV">West Virginia</option>
+                <option value="WI">Wisconsin</option>
+                <option value="WY">Wyoming</option>
+            </select>
+            <!--checkbnox-->
+            <div class="line"></div>
+            <div style="margin-top: 20px;margin-left: 32px;color: rgb(32, 89, 130);font-weight: 400;font-size: 19px;">
+                <label for="autofill" >Want us to auto-detect your location? Check here</label>
+                <input type="checkbox" id="autofill" name="autofill" value="Select state" onclick="checker()" />
+            </div>
+            <div     style="margin-top: 25px;
+            margin-left: 33px;">
+            <button style="height: 48px;width: 111px;background-color: rgba(78, 111, 173, 255);color: white;font-size: 17px;font-weight:300; border: none;">SUBMIT</button>
+        </div>
+        </form>
+        <button onclick="clearThePage()" style="height: 48px;width: 111px;background-color: rgba(254,182,2,255);color: white;font-size: 17px;font-weight:300; border: none;margin-left:148px;position:relative;bottom:48px;">CLEAR</button>
+
+    </div>
+    <div class="first-container" style="display: none" id="first-container">
+        <div class="temp-card">
+            <div class="temp-card-heading" id="temp-card-heading"></div>
+            <div class="container">
+                <img class="temp-card-logo" id="temp-card-logo" alt="" />
+                <div style="display: flex">
+                    <div class="temp-card-celsius" id="temp-card-celsius"></div>
+                    <span class="degree" id="degree">°</span>
+                </div>
+            </div>
+            <div class="temp-card-logo-status">Clear</div>
+            <div class="parent-temp-features">
+                <div class="feature-holder">
+                    <div class="feature">Humidity</div>
+                    <div class="imager-holder">
+                        <img src="static/Images/humidity.png" class="feature-image" alt="" />
+                    </div>
+                    <div class="feature-value" id="humidity-value"></div>
+                </div>
+                <div class="feature-holder">
+                    <div class="feature">Pressure</div>
+                    <div class="imager-holder">
+                        <img src="static/Images/Pressure.png" class="feature-image" alt="" />
+                    </div>
+                    <div class="feature-value" id="pressure-value"></div>
+                </div>
+                <div class="feature-holder">
+                    <div class="feature">Windspeed</div>
+                    <div class="imager-holder">
+                        <img src="static/Images/humidity.png" class="feature-image" alt="" />
+                    </div>
+                    <div class="feature-value" id="windspeed-value"></div>
+                </div>
+                <div class="feature-holder">
+                    <div class="feature">Visibility</div>
+                    <div class="imager-holder">
+                        <img src="static/Images/Visibility.png" class="feature-image" alt="" />
+                    </div>
+                    <div class="feature-value" id="visibility-value"></div>
+                </div>
+                <div class="feature-holder">
+                    <div class="feature">Cloud Cover</div>
+                    <div class="imager-holder">
+                        <img src="static/Images/Cloud_Cover.png" class="feature-image" alt="" />
+                    </div>
+                    <div class="feature-value" id="cloudCover-value"></div>
+                </div>
+                <div class="feature-holder">
+                    <div class="feature">UV Level</div>
+                    <div class="imager-holder">
+                        <img src="static/Images/UV_Level.png" class="feature-image" alt="" />
+                    </div>
+                    <div class="feature-value" id="uvlevel-value"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-heading">
+            <div class="table-heading-date">Date</div>
+            <div style="
+            display: flex;
+            margin-left: 130px;
+            width: 100%;
+            justify-content: space-around;
+            padding-top: 12px;
+            font-size: 20px;
+          ">
+                <p>Status</p>
+                <p>Temp High</p>
+                <p>Temp Low</p>
+                <p>Wind Speed</p>
+            </div>
+        </div>
+
+        <div class="horizbars" onclick="displayDailyWeatherDetails(0)">
+            <div style="
+            width: 1170px;
+            display: flex;
+            justify-content: space-between;
+          ">
+                <div class="horizbars-text" style="padding-left: 30px"></div>
+                <div style="
+              display: flex;
+              justify-content: space-between;
+              width: 860px;
+            ">
+                    <div style="
+                
+                width: 200px;
+                display: flex;
+                justify-content: center;
+              ">
+                        <img class="horizbars-image"
+                            alt="" /><!--src="static/Images/Weather Symbols for Weather Codes/clear_day.svg"-->
+                        <p class="status_col" style="padding-left: 30px; padding-top: 30px"></p>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-low_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-high_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="windspeed-col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="horizbars" onclick="displayDailyWeatherDetails(1)">
+            <div style="
+            width: 1170px;
+            
+            display: flex;
+            justify-content: space-between;
+          ">
+                <div class="horizbars-text" style="padding-left: 30px"></div>
+                <div style="
+              display: flex;
+              justify-content: space-between;
+              width: 860px;
+            ">
+                    <div style="
+                
+                width: 200px;
+                display: flex;
+                justify-content: center;
+              ">
+                        <img class="horizbars-image" alt="" />
+                        <p class="status_col" style="padding-left: 30px; padding-top: 30px"></p>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-low_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-high_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="windspeed-col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="horizbars" onclick="displayDailyWeatherDetails(2)">
+            <div style="
+            width: 1170px;
+            
+            display: flex;
+            justify-content: space-between;
+          ">
+                <div class="horizbars-text" style="padding-left: 30px"></div>
+                <div style="
+              display: flex;
+              
+              justify-content: space-between;
+              width: 860px;
+            ">
+                    <div style="
+               
+                width: 200px;
+                display: flex;
+                justify-content: center;
+              ">
+                        <img class="horizbars-image" alt="" />
+                        <p class="status_col" style="padding-left: 30px; padding-top: 30px"></p>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-low_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-high_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="windspeed-col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="horizbars" onclick="displayDailyWeatherDetails(3)">
+            <div style="
+            width: 1170px;
+        
+            display: flex;
+            justify-content: space-between;
+          ">
+                <div class="horizbars-text" style="padding-left: 30px"></div>
+                <div style="
+              display: flex;
+              
+              justify-content: space-between;
+              width: 860px;
+            ">
+                    <div style="
+        
+                width: 200px;
+                display: flex;
+                justify-content: center;
+              ">
+                        <img class="horizbars-image" alt="" />
+                        <p class="status_col" style="padding-left: 30px; padding-top: 30px"></p>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-low_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-high_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="windspeed-col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="horizbars" onclick="displayDailyWeatherDetails(4)">
+            <div style="
+            width: 1170px;
+        
+            display: flex;
+            justify-content: space-between;
+          ">
+                <div class="horizbars-text" style="padding-left: 30px"></div>
+                <div style="
+              display: flex;
+              
+              justify-content: space-between;
+              width: 860px;
+            ">
+                    <div style="
+        
+                width: 200px;
+                display: flex;
+                justify-content: center;
+              ">
+                        <img class="horizbars-image" alt="" />
+                        <p class="status_col" style="padding-left: 30px; padding-top: 30px"></p>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-low_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-high_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="windspeed-col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="horizbars" onclick="displayDailyWeatherDetails(5)">
+            <div style="
+            width: 1170px;
+            
+            display: flex;
+            justify-content: space-between;
+          ">
+                <div class="horizbars-text" style="padding-left: 30px"></div>
+                <div style="
+              display: flex;
+              
+              justify-content: space-between;
+              width: 860px;
+            ">
+                    <div style="
+                
+                width: 200px;
+                display: flex;
+                justify-content: center;
+              ">
+                        <img class="horizbars-image" alt="" />
+                        <p class="status_col" style="padding-left: 30px; padding-top: 30px"></p>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-low_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="temp-high_col"></div>
+                    </div>
+                    <div style=" width: 120px; text-align: center">
+                        <div class="windspeed-col"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--First Container Ends Here , has Card and Table-->
+
+    <!-- <div class="second-container" id="second-container" style="display:none"> -->
+    <div class="second-container" id="second-container" style="display:none;">
+        <h1 class="second-heading" style="margin-bottom: 60px">
+            Daily Weather Details
+        </h1>
+        <div class="second-container1">
+            <div style="
+            display: flex;
+            justify-content: space-between;
+          ">
+                <div style="text-align: left; margin-left: 20px">
+                    <div class="second-container-date" id="second-container-date"></div>
+                    <div class="second-container-status" id="second-container-status"></div>
+                    <div class="second-container-temp" id="second-container-temp">80.83&deg;F/59&deg;F</div>
+                </div>
+                <img class="weather-image" id="weather-image" alt="not available" />
+            </div>
+            <!--white part centered-->
+            <div style="display: flex;justify-content:center">
+                <div class="second-container-secondHalf"
+                    style=" width: 200px; text-align: right">
+                    <p class="second-container-secondHalf">Precipitation:</p>
+                    <p class="second-container-secondHalf">Chance of Rain:</p>
+                    <p class="second-container-secondHalf">Wind Speed:</p>
+                    <p class="second-container-secondHalf">Humidity:</p>
+                    <p class="second-container-secondHalf" style="padding-top:24px;">Visibility:</p>
+                    <p class="second-container-secondHalf">Sunrise/Sunset:</p>
+                </div>
+                <div class="second-container-secondHalf"
+                    style=" width: 200px; text-align: left">
+                    <p class="second-container-secondHalf1"></p>
+                    <p class="second-container-secondHalf1"></p>
+                    <p class="second-container-secondHalf1"></p>
+                    <p class="second-container-secondHalf1"></p>
+                    <p class="second-container-secondHalf1"></p>
+                    <p class="second-container-secondHalf1"></p>
+                </div>
+            </div>
+        </div>
+
+        <h1 class="second-heading" style="margin-bottom: 60px">Weather Charts</h1>
+
+        <div class="rotated" id="Vbutton" onclick="makeChartsVisible()">&lt;</div>
+
+    </div>
+
+    <div class="charts-container" id="charts-container" style="display:none;">
+        <figure class="highcharts-figure" style="width:1000px;margin:0 auto;">
+            <div id="container1"></div>
+           
+        </figure>
+        <!--Second graph:-->
+        
+        <figure class="highcharts-figure" style="width:1000px;margin:0 auto;margin-top:49px;padding-bottom:80px;">
+            <div id="container2">
+               
+            </div>
+           
+        </figure>
+    </div>
+
+    <!--
+    <h2>Your Selection:</h2>
+    <div id="output"></div>
+
+    <button id="getLocation">Get Location</button>
+    <div id="result"></div>
+
+    Hitting backend flask
+    <input type="text" id="nameInput" placeholder="Enter your name" />
+    <button id="greetButton">Greet</button>
+
+    <p id="response"></p>
+-->
+</body>
+
+</html>
